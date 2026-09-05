@@ -55,6 +55,12 @@ def flatten(offer: dict) -> dict:
     coords = geo.get("coordinates") or {}
     jk = geo.get("jk") or {}
 
+    # Ближайшее метро. ЦИАН отдаёт список станций, отсортированный по удалённости;
+    # берём первую - помеченную isDefault, а если пометки нет, то самую близкую.
+    metros = geo.get("undergrounds") or []
+    metro = next((m for m in metros if m.get("isDefault")), metros[0] if metros else {})
+    walk = metro.get("transportType") == "walk"
+
     rooms = offer.get("roomsCount")
     total_area = _num(offer.get("totalArea"))
     price = terms.get("priceRur")
@@ -86,6 +92,10 @@ def flatten(offer: dict) -> dict:
         "is_newbuild": terms.get("saleType") == "fz214",
         "jk_name": jk.get("name"),
         "address": geo.get("userInput"),
+        # Поле «Адрес/Метро» из задания
+        "metro": metro.get("name"),
+        "metro_time": metro.get("time"),                        # минут до метро
+        "metro_transport": ("пешком" if walk else "транспортом") if metro else None,
         "lat": coords.get("lat"),
         "lng": coords.get("lng"),
         # условия аренды (для продажи будут пустыми)

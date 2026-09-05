@@ -566,11 +566,11 @@ def fig_bias(df: pd.DataFrame, bias: pd.DataFrame) -> None:
 
 
 def fig_payback_compare(pb: pd.DataFrame, pbm: pd.DataFrame) -> None:
-    """Наивная оценка окупаемости против сопоставимой."""
+    """Основной расчёт по заданию против сопоставимой оценки."""
     m = pb.merge(pbm, on="Подкатегория")
     fig, ax = plt.subplots(figsize=(9.5, 5.4))
     x = np.arange(len(m))
-    series = [("Окупаемость по средним, лет", "наивная: средняя продажа / средняя аренда", C_SALE),
+    series = [("Окупаемость по средним, лет", "по заданию: средняя продажа / средняя аренда", C_SALE),
               ("Окупаемость по медианам, лет", "по медианам", "#1baf7a"),
               ("Окупаемость сопоставимая, лет", "сопоставимая: без ДДУ + по площади", C_RENT)]
     for k, (col, lbl, color) in enumerate(series):
